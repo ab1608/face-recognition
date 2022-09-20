@@ -13,10 +13,10 @@ import Particles from "react-tsparticles";
 import {loadFull} from "tsparticles";
 import './App.css';
 import logo from "./components/Logo/Logo";
-
+import { key } from "../clari_key.js"
 
 const app = new Clarifai.App({
-	apiKey: 'c626baa27fe44b3bbf60453d0da476f1'
+	apiKey: key
 })
 
 const particleOptions = {
