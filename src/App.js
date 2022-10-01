@@ -87,6 +87,22 @@ const particleOptions = {
 	detectRetina: true,
 }
 
+const initialState = {
+	input: '',
+	imageUrl: '',
+	box: {},
+	route: 'sign-in',
+	isSignedIn: false,
+	user: {
+		id: '',
+		name: '',
+		email: '',
+		entries: 0,
+		joined: ''
+	}
+}
+
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -174,7 +190,7 @@ class App extends React.Component {
 
 	onRouteChange = (route) => {
 		if (route === 'sign-out') {
-			this.setState({isSignedIn: false})
+			this.setState({initialState})
 		} else if (route === 'home') {
 			this.setState({isSignedIn: true})
 		}
