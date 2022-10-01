@@ -1,6 +1,5 @@
 import Navigation from "./components/Navigation/Navigation";
 import React from 'react';
-import Clarifai from 'clarifai'
 
 import Logo from "./components/Logo/Logo"
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm"
@@ -8,84 +7,9 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition"
 import SignIn from "./components/SignIn/SignIn";
 import Rank from "./components/Rank/Rank"
 import Register from "./components/Register/Register";
-
-import Particles from "react-tsparticles";
 import {loadFull} from "tsparticles";
 import './App.css';
-import logo from "./components/Logo/Logo";
-import { key } from "./clari_key"
 
-const app = new Clarifai.App({
-	apiKey: key
-})
-
-const particleOptions = {
-	fpsLimit: 120,
-	interactivity: {
-		events: {
-			onClick: {
-				enable: true,
-				mode: "push",
-			},
-			onHover: {
-				enable: true,
-				mode: "repulse",
-			},
-			resize: true,
-		},
-		modes: {
-			push: {
-				quantity: 4,
-			},
-			repulse: {
-				distance: 200,
-				duration: 0.4,
-			},
-		},
-	},
-	particles: {
-		color: {
-			value: "#ffffff",
-		},
-		links: {
-			color: "#ffffff",
-			distance: 150,
-			enable: true,
-			opacity: 0.5,
-			width: 1,
-		},
-		collisions: {
-			enable: true,
-		},
-		move: {
-			direction: "none",
-			enable: true,
-			outModes: {
-				default: "bounce",
-			},
-			random: false,
-			speed: 3,
-			straight: false,
-		},
-		number: {
-			density: {
-				enable: true,
-				area: 500,
-			},
-			value: 80,
-		},
-		opacity: {
-			value: 0.5,
-		},
-		shape: {
-			type: "circle",
-		},
-		size: {
-			value: {min: 1, max: 5},
-		},
-	},
-	detectRetina: true,
-}
 
 const initialState = {
 	input: '',
@@ -101,7 +25,6 @@ const initialState = {
 		joined: ''
 	}
 }
-
 
 class App extends React.Component {
 	constructor(props) {
@@ -123,9 +46,9 @@ class App extends React.Component {
 	}
 
 	// componentDidMount() {
-	//     fetch('http://localhost:3000')
-	//         .then((response) => response.json())
-	//         .then(console.log)
+	// 	fetch('http://localhost:3000')
+	// 		.then((response) => response.json())
+	// 		.then(console.log)
 	// }
 
 	loadUser = (data) => {
@@ -164,8 +87,15 @@ class App extends React.Component {
 	}
 
 	onPictureSubmit = () => {
-		this.setState({imageUrl: this.state.input})
-		app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input,)
+		this.setState({imageUrl: this.state.input});
+		fetch('http://localhost:3000/imageurl', {
+			method: 'post',
+			headers: {'content-type': 'application/json'},
+			body: JSON.stringify({
+				input: this.state.input
+			})
+		})
+			.then(response => response.json())
 			.then((response) => {
 				if (response) {
 					// Fetch this route and send the ID
@@ -175,12 +105,13 @@ class App extends React.Component {
 						body: JSON.stringify({
 							id: this.state.user.id,
 						})
-					}).then(response => response.json())
+					})
+						.then(response => response.json())
 						.then(count => {
 							// this.setState({user:{
 							// 	entries: count
 							// }})
-							this.setState(Object.assign(this.state.user, {entries:count}))
+							this.setState(Object.assign(this.state.user, {entries: count}))
 						})
 				}
 				this.displayFaceBox(this.calculateFaceLocation(response))
