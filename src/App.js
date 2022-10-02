@@ -28,20 +28,7 @@ const initialState = {
 class App extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			input: '',
-			imageUrl: '',
-			box: {},
-			route: 'sign-in',
-			isSignedIn: false,
-			user: {
-				id: '',
-				name: '',
-				email: '',
-				entries: 0,
-				joined: ''
-			}
-		}
+		this.state = initialState;
 	}
 
 	// componentDidMount() {
@@ -144,11 +131,13 @@ class App extends React.Component {
 				{route === 'home'
 					? <div>
 						<Logo></Logo>
-						<Rank name={this.state.user.name} entries={this.state.user.entries}></Rank>
+						<Rank name={this.state.user.name}
+							  entries={this.state.user.entries}>
+						</Rank>
 						<ImageLinkForm
 							onInputChange={this.onInputChange}
-							onButtonSubmit={this.onPictureSubmit}
-						/>
+							onButtonSubmit={this.onPictureSubmit}>
+						</ImageLinkForm>
 						<FaceRecognition box={box} imageUrl={imageUrl}></FaceRecognition>
 					</div>
 					: (
