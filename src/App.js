@@ -7,7 +7,6 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition"
 import SignIn from "./components/SignIn/SignIn";
 import Rank from "./components/Rank/Rank"
 import Register from "./components/Register/Register";
-import {loadFull} from "tsparticles";
 import './App.css';
 
 
@@ -78,19 +77,19 @@ class App extends React.Component {
 	}
 
 	displayFaceBox = (box) => {
-		this.setState({box: box})
+		this.setState({ box: box })
 	}
 
 
 	onInputChange = (event) => {
-		this.setState({input: event.target.value})
+		this.setState({ input: event.target.value })
 	}
 
 	onPictureSubmit = () => {
-		this.setState({imageUrl: this.state.input});
-		fetch('http://localhost:3000/imageurl', {
+		this.setState({ imageUrl: this.state.input });
+		fetch('https://fast-mesa-16020.herokuapp.com/imageurl', {
 			method: 'post',
-			headers: {'content-type': 'application/json'},
+			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({
 				input: this.state.input
 			})
@@ -99,9 +98,9 @@ class App extends React.Component {
 			.then((response) => {
 				if (response) {
 					// Fetch this route and send the ID
-					fetch('http://localhost:3000/image', {
+					fetch('https://fast-mesa-16020.herokuapp.com/image', {
 						method: 'put',
-						headers: {'content-type': 'application/json'},
+						headers: { 'content-type': 'application/json' },
 						body: JSON.stringify({
 							id: this.state.user.id,
 						})
@@ -111,7 +110,7 @@ class App extends React.Component {
 							// this.setState({user:{
 							// 	entries: count
 							// }})
-							this.setState(Object.assign(this.state.user, {entries: count}))
+							this.setState(Object.assign(this.state.user, { entries: count }))
 						})
 				}
 				this.displayFaceBox(this.calculateFaceLocation(response))
@@ -121,30 +120,17 @@ class App extends React.Component {
 
 	onRouteChange = (route) => {
 		if (route === 'sign-out') {
-			this.setState({initialState})
+			this.setState({ initialState })
 		} else if (route === 'home') {
-			this.setState({isSignedIn: true})
+			this.setState({ isSignedIn: true })
 		}
-		this.setState({route: route})
+		this.setState({ route: route })
 	}
 
 
 	render() {
-		const particlesInit = async (main) => {
-			// console.log(main);
 
-			// you can initialize the tsParticles instance (main) here, adding custom shapes or presets
-			// this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-			// starting from v2 you can add only the features you need reducing the bundle size
-			await loadFull(main);
-		};
-
-		const particlesLoaded = (container) => {
-			// console.log(container);
-		};
-
-
-		const {input, box, imageUrl, isSignedIn, route} = this.state;
+		const { input, box, imageUrl, isSignedIn, route } = this.state;
 
 		return (
 			<div className="App">
